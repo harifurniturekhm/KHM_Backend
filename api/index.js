@@ -7,12 +7,14 @@ const Admin = require('../models/Admin');
 
 const app = express();
 
-// CORS — allow localhost for dev and any deployed frontend domains
+// CORS — allow localhost for dev and deployed frontend
 const allowedOrigins = [
     /^http:\/\/localhost:\d+$/,
     /^http:\/\/127\.0\.0\.1:\d+$/,
-    'https://hari-furniture.vercel.app',  // update to your actual Vercel client URL
-];
+    // Production frontend URLs — add your deployed Vercel client & admin URLs here:
+    process.env.CLIENT_URL,
+    'https://khm-frontend-hvsq7gt0l-harifurniturekhms-projects.vercel.app',
+].filter(Boolean);
 
 app.use(cors({
     origin: function (origin, callback) {
