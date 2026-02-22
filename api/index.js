@@ -7,16 +7,10 @@ const Admin = require('../models/Admin');
 
 const app = express();
 
-// CORS — simple array of allowed origins
+// ✅ SIMPLE WORKING CORS (Fixes everything)
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'http://localhost:5175',
-        'https://khm-frontend-4uio.vercel.app',
-        process.env.CLIENT_URL,
-    ].filter(Boolean),
-    credentials: true,
+    origin: true,
+    credentials: true
 }));
 
 app.use(express.json());
@@ -36,9 +30,11 @@ app.use('/api/reviews', require('../routes/reviewRoutes'));
 app.use('/api/queries', require('../routes/queryRoutes'));
 app.use('/api/likes', require('../routes/likeRoutes'));
 
-app.get('/', (req, res) => res.json({ message: 'Hari Furniture & Co API' }));
+app.get('/', (req, res) => {
+    res.json({ message: 'Hari Furniture & Co API Running' });
+});
 
-// Seed admin on cold start
+// Seed admin
 const seedAdmin = async () => {
     try {
         const exists = await Admin.findOne({ email: process.env.ADMIN_EMAIL });
@@ -52,10 +48,15 @@ const seedAdmin = async () => {
     }
 };
 
-// Connect to DB and seed (runs once per cold start on Vercel)
 connectDB().then(() => {
     seedAdmin();
 });
 
-// IMPORTANT: Do NOT call app.listen() for Vercel serverless
+// Start server if running directly (local dev)
+if (require.main === module) {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+// ❗ VERY IMPORTANT FOR VERCEL
 module.exports = app;
