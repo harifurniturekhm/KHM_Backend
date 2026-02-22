@@ -11,6 +11,7 @@ app.use((req, res, next) => {
     const origin = req.headers.origin || '';
     const allowedOrigins = [
         "https://khm-frontend-xi.vercel.app",
+        "https://harifurnitureandco.in",
         "http://localhost:5173",
         "http://localhost:5174",
         "null",
@@ -20,7 +21,7 @@ app.use((req, res, next) => {
     if (allowedOrigins.includes(origin) || origin.startsWith('file://')) {
         res.setHeader("Access-Control-Allow-Origin", origin);
     } else {
-        res.setHeader("Access-Control-Allow-Origin", "https://khm-frontend-xi.vercel.app");
+        res.setHeader("Access-Control-Allow-Origin", "https://harifurnitureandco.in");
     }
 
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
