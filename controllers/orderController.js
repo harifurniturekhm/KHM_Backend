@@ -55,7 +55,22 @@ exports.updateStatus = async (req, res) => {
         if (!order) return res.status(404).json({ message: 'Order not found' });
 
         const previousStatus = order.status;
-        order.status = req.body.status;
+        const newStatus = req.body.status;
+
+        // Validation for allowed transitions
+        const allowedTransitions = {
+            'Pending': ['Pending', 'Confirmed', 'Cancelled'],
+            'Confirmed': ['Confirmed', 'Shipped', 'Cancelled'],
+            'Shipped': ['Shipped', 'Delivered', 'Cancelled'],
+            'Delivered': ['Delivered'],
+            'Cancelled': ['Cancelled']
+        };
+
+        if (!allowedTransitions[previousStatus].includes(newStatus)) {
+            return res.status(400).json({ message: `Cannot update status from ${previousStatus} to ${newStatus}` });
+        }
+
+        order.status = newStatus;
         await order.save();
 
         // Auto-convert to Manual Sale if just delivered
