@@ -27,8 +27,13 @@ exports.create = async (req, res) => {
         const prod = await Product.findById(product);
         if (!prod) return res.status(404).json({ message: 'Product not found' });
 
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+
         const discountedPrice = Math.round(prod.price - (prod.price * offerPercent / 100));
-        const offer = await Offer.create({ product, offerPercent, startDate, endDate, discountedPrice });
+        const offer = await Offer.create({ product, offerPercent, startDate: start, endDate: end, discountedPrice });
         res.status(201).json(offer);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -41,8 +46,13 @@ exports.update = async (req, res) => {
         const prod = await Product.findById(product);
         if (!prod) return res.status(404).json({ message: 'Product not found' });
 
+        const start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+        const end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+
         const discountedPrice = Math.round(prod.price - (prod.price * offerPercent / 100));
-        const offer = await Offer.findByIdAndUpdate(req.params.id, { product, offerPercent, startDate, endDate, discountedPrice }, { new: true });
+        const offer = await Offer.findByIdAndUpdate(req.params.id, { product, offerPercent, startDate: start, endDate: end, discountedPrice, isActive: true }, { new: true });
         res.json(offer);
     } catch (error) {
         res.status(500).json({ message: error.message });
