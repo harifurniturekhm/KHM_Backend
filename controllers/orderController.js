@@ -60,8 +60,8 @@ exports.updateStatus = async (req, res) => {
         // Validation for allowed transitions
         const allowedTransitions = {
             'Pending': ['Pending', 'Confirmed', 'Cancelled'],
-            'Confirmed': ['Confirmed', 'Shipped', 'Cancelled'],
-            'Shipped': ['Shipped', 'Delivered', 'Cancelled'],
+            'Confirmed': ['Confirmed', 'Delivered', 'Cancelled'],
+            'Shipped': ['Shipped', 'Delivered', 'Cancelled'], // Legacy support for existing orders
             'Delivered': ['Delivered'],
             'Cancelled': ['Cancelled']
         };
