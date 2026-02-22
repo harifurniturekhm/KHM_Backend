@@ -28,10 +28,10 @@ const verifyUserToken = (req, res, next) => {
 
 const restrictToLocalhost = (req, res, next) => {
     const origin = req.headers.origin || req.headers.referer || '';
-    const isAllowed = origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:');
+    const isAllowed = origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:') || origin.startsWith('file://') || origin === 'null';
 
     if (!isAllowed) {
-        return res.status(403).json({ message: 'Admin access restricted to localhost' });
+        return res.status(403).json({ message: 'Admin access restricted to localhost or Desktop App' });
     }
     next();
 };

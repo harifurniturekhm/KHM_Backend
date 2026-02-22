@@ -8,7 +8,21 @@ const Admin = require('../models/Admin');
 const app = express();
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "https://khm-frontend-xi.vercel.app");
+    const origin = req.headers.origin || '';
+    const allowedOrigins = [
+        "https://khm-frontend-xi.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "null",
+        "file://"
+    ];
+
+    if (allowedOrigins.includes(origin) || origin.startsWith('file://')) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    } else {
+        res.setHeader("Access-Control-Allow-Origin", "https://khm-frontend-xi.vercel.app");
+    }
+
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
     res.setHeader("Access-Control-Allow-Credentials", "true");
